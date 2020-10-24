@@ -1,13 +1,123 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.display {
+  grid-area: display;
+  background-color: #433337;
+}
+.btn-clear {
+  grid-area: clear;
+  background-color: #ffffff;
+}
+.btn-equal {
+  grid-area: equal;
+  background-color: #d12c4d;
+}
+.btn-minus {
+  grid-area: minus;
+  background-color: #d12c4d;
+}
+.btn-add {
+  grid-area: add;
+  background-color: #d12c4d;
+}
+.btn-multiply {
+  grid-area: multiply;
+  background-color: #d12c4d;
+}
+.btn-divide {
+  grid-area: divide;
+  background-color: #d12c4d;
+}
+.btn0 {
+  grid-area: number0;
+  background-color: #ffffff;
+}
+.btn1 {
+  grid-area: number1;
+  background-color: #ffffff;
+}
+.btn2 {
+  grid-area: number2;
+  background-color: #ffffff;
+}
+.btn3 {
+  grid-area: number3;
+  background-color: #ffffff;
+}
+.btn4 {
+  grid-area: number4;
+  background-color: #ffffff;
+}
+.btn5 {
+  grid-area: number5;
+  background-color: #ffffff;
+}
+.btn6 {
+  grid-area: number6;
+  background-color: #ffffff;
+}
+.btn7 {
+  grid-area: number7;
+  background-color: #ffffff;
+}
+.btn8 {
+  grid-area: number8;
+  background-color: #ffffff;
+}
+.btn9 {
+  grid-area: number9;
+  background-color: #ffffff;
+}
+
+.btn-number,
+.btn-clear {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.btn-clear,
+.btn-equal,
+.btn-number,
+.btn-divide,
+.btn-minus,
+.btn-add,
+.btn-multiply {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 300px;
+  height: 500px;
+  border: 2px solid black;
+  display: grid;
+  background-color: black;
+  grid-template-areas:
+    "display display display display"
+    "display display display display"
+    "clear clear clear add"
+    "number1 number2 number3 minus"
+    "number4 number5 number6 multiply"
+    "number7 number8 number9 divide"
+    "number0 equal equal equal";
+  gap: 2px;
 }
