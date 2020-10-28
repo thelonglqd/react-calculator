@@ -9,19 +9,49 @@ import {
   CgClose,
 } from "react-icons/cg";
 
+const isASign = (input) => {
+  return (
+    input.trim() === "+" ||
+    input.trim() === "-" ||
+    input.trim() === "x" ||
+    input.trim() === ":"
+  );
+};
+
 function App() {
   const [display, setDisplay] = useState([]);
 
-  const calculate = () => {};
+  const handleEqualClick = () => {
+    const replaced = display.map((item) => {
+      if (item.trim() === "x") return " * ";
+      else return item;
+    });
+
+    console.log("replaced: ", replaced);
+    setDisplay([eval(replaced.join("")) + ""]);
+  };
 
   const handleClear = () => setDisplay([]);
 
   const handleSignsClick = (sign) => {
-    sign === "=" ? calculate() : setDisplay([...display, ` ${sign} `]);
+    display.length &&
+      !isASign(display[display.length - 1]) &&
+      setDisplay([...display, ` ${sign} `]);
   };
 
   const handleNumberClick = (numb) => {
-    setDisplay([...display, numb + ""]);
+    if (!display.length || isASign(display[display.length - 1])) {
+      setDisplay([...display, numb + ""]);
+    } else {
+      const newDisplay = display;
+      newDisplay.splice(
+        newDisplay.length - 1,
+        1,
+        newDisplay[newDisplay.length - 1] + numb
+      );
+      console.log("newDisplay: ", newDisplay);
+      setDisplay([...newDisplay]);
+    }
   };
 
   return (
@@ -33,7 +63,7 @@ function App() {
         <div onClick={handleClear} className="btn-clear">
           CLEAR
         </div>
-        <div onClick={() => handleSignsClick("=")} className="btn-equal">
+        <div onClick={handleEqualClick} className="btn-equal">
           <CgMathEqual size="30" color="white" />
         </div>
         <div onClick={() => handleSignsClick("+")} className="btn-add">

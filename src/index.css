@@ -29,7 +29,8 @@ code {
   bottom: 0px;
   right: 0px;
   color: #ffffff;
-  font-size: 1.5rem;
+  font-size: 2rem;
+  font-weight: bold;
 }
 .btn-clear {
   grid-area: clear;
