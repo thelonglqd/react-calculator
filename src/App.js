@@ -22,13 +22,20 @@ function App() {
   const [display, setDisplay] = useState([]);
 
   const handleEqualClick = () => {
-    const replaced = display.map((item) => {
-      if (item.trim() === "x") return " * ";
-      else return item;
+    const formartter = new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
     });
 
-    console.log("replaced: ", replaced);
-    setDisplay([eval(replaced.join("")) + ""]);
+    if (!display.length) return;
+
+    const replaced = display.map((item) => {
+      if (item.trim() === "x") return " * ";
+      if (item.trim() === ":") return " / ";
+      return item;
+    });
+
+    setDisplay([formartter.format(eval(replaced.join("")))]);
   };
 
   const handleClear = () => setDisplay([]);
@@ -49,7 +56,6 @@ function App() {
         1,
         newDisplay[newDisplay.length - 1] + numb
       );
-      console.log("newDisplay: ", newDisplay);
       setDisplay([...newDisplay]);
     }
   };
