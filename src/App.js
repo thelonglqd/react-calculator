@@ -1,6 +1,6 @@
 import "./index.css";
 
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   CgMathEqual,
   CgMathDivide,
@@ -18,10 +18,13 @@ const isASign = (input) => {
   );
 };
 
+const validNumberKeys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+const validSignKeys = ["+", "-", "*", ":", "=", "Enter"];
+
 function App() {
   const [display, setDisplay] = useState([]);
 
-  const handleEqualClick = () => {
+  const handleEqualClick = useCallback(() => {
     const formartter = new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 0,
       maximumFractionDigits: 2,
@@ -36,29 +39,74 @@ function App() {
     });
 
     setDisplay([formartter.format(eval(replaced.join("")))]);
-  };
+  }, [display]);
 
   const handleClear = () => setDisplay([]);
 
-  const handleSignsClick = (sign) => {
-    display.length &&
-      !isASign(display[display.length - 1]) &&
-      setDisplay([...display, ` ${sign} `]);
-  };
+  const handleSignsClick = useCallback(
+    (sign) => {
+      display.length &&
+        !isASign(display[display.length - 1]) &&
+        setDisplay([...display, ` ${sign} `]);
+    },
+    [display]
+  );
 
-  const handleNumberClick = (numb) => {
-    if (!display.length || isASign(display[display.length - 1])) {
-      setDisplay([...display, numb + ""]);
-    } else {
-      const newDisplay = display;
-      newDisplay.splice(
-        newDisplay.length - 1,
-        1,
-        newDisplay[newDisplay.length - 1] + numb
-      );
-      setDisplay([...newDisplay]);
-    }
-  };
+  const handleNumberClick = useCallback(
+    (numb) => {
+      if (!display.length || isASign(display[display.length - 1])) {
+        setDisplay([...display, numb + ""]);
+      } else {
+        const newDisplay = display;
+        newDisplay.splice(
+          newDisplay.length - 1,
+          1,
+          newDisplay[newDisplay.length - 1] + numb
+        );
+        setDisplay([...newDisplay]);
+      }
+    },
+    [display]
+  );
+
+  useEffect(() => {
+    const keyboardInputListener = ({ key }) => {
+      console.log("key: ", key);
+      if ([...validNumberKeys, ...validSignKeys].indexOf(key) >= 0) {
+        switch (key) {
+          case "1":
+          case "2":
+          case "3":
+          case "4":
+          case "5":
+          case "6":
+          case "7":
+          case "8":
+          case "9":
+          case "0":
+            handleNumberClick(key);
+            break;
+          case "+":
+          case "-":
+          case "*":
+          case "/":
+            handleSignsClick(key);
+            break;
+          case "=":
+          case "Enter":
+            handleEqualClick();
+            break;
+          default:
+            return;
+        }
+      }
+    };
+    window.addEventListener("keyup", keyboardInputListener);
+
+    return () => {
+      window.removeEventListener("keyup", keyboardInputListener);
+    };
+  }, [handleNumberClick, handleSignsClick, handleEqualClick]);
 
   return (
     <div className="app">
