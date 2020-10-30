@@ -19,10 +19,12 @@ const isASign = (input) => {
 };
 
 const validNumberKeys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
-const validSignKeys = ["+", "-", "*", ":", "=", "Enter"];
+const validSignKeys = ["+", "-", "*", ":", "=", "/", "Enter"];
 
 function App() {
   const [display, setDisplay] = useState([]);
+  const [result, setResult] = useState("");
+  const [showResult, setShowResult] = useState(false);
 
   const handleEqualClick = useCallback(() => {
     const formartter = new Intl.NumberFormat("en-US", {
@@ -38,13 +40,17 @@ function App() {
       return item;
     });
 
-    setDisplay([formartter.format(eval(replaced.join("")))]);
+    setShowResult(true);
+    setResult(formartter.format(eval(replaced.join(""))));
+    setDisplay([]);
   }, [display]);
 
-  const handleClear = () => setDisplay([]);
+  const handleClear = () => [setDisplay([]), setShowResult(false)];
 
   const handleSignsClick = useCallback(
     (sign) => {
+      sign === "*" && (sign = "x");
+      sign === "/" && (sign = ":");
       display.length &&
         !isASign(display[display.length - 1]) &&
         setDisplay([...display, ` ${sign} `]);
@@ -54,6 +60,7 @@ function App() {
 
   const handleNumberClick = useCallback(
     (numb) => {
+      setShowResult(false);
       if (!display.length || isASign(display[display.length - 1])) {
         setDisplay([...display, numb + ""]);
       } else {
@@ -71,7 +78,6 @@ function App() {
 
   useEffect(() => {
     const keyboardInputListener = ({ key }) => {
-      console.log("key: ", key);
       if ([...validNumberKeys, ...validSignKeys].indexOf(key) >= 0) {
         switch (key) {
           case "1":
@@ -112,7 +118,11 @@ function App() {
     <div className="app">
       <div className="container">
         <div className="display">
-          <div className="inner-display">{display.join("")}</div>
+          {showResult ? (
+            <div className="inner-display">{result}</div>
+          ) : (
+            <div className="inner-display">{display.join("")}</div>
+          )}
         </div>
         <div onClick={handleClear} className="btn-clear">
           CLEAR
